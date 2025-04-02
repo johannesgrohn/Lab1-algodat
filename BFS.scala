@@ -14,6 +14,7 @@ case class BFS(val nodes: Set[Node]):
         var found: Boolean = false 
 
         for node <- nodes do
+            node.pred = None
             node.setUnvisited()
         start.setVisited()
 
@@ -31,15 +32,15 @@ case class BFS(val nodes: Set[Node]):
 
 
         
-        if found && start != end then 
+        if found then 
             var level: Int = 0 
             var current: Option[Node] = Some(end)
             while !current.get.pred.isEmpty do
                 current = current.get.pred
                 level += 1
             println(level)
-        else if found && start == end then
-            println(0)    
+        //else if found && start == end then
+        //    println(0)    
         else 
             println("Impossible")
     // def findShortestPath(firstWord: Node, secondWord: Node): Unit =
