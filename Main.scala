@@ -1,3 +1,5 @@
+package main
+
 import scala.collection.mutable.Set
 import scala.io.StdIn.readLine
 
@@ -20,18 +22,28 @@ import scala.io.StdIn.readLine
     queries.foreach(println)
 
 
+    val nodes: Set[Node] = makeNodes(words)
+    findandSetNeighbours(nodes)
 
-def makeNodes(words: Set[String]): Set[Nodes] = 
+    nodes.foreach(node => println(node.toString() + " " + node.neighbours.toString()))
+
+
+
+
+def makeNodes(words: Set[String]): Set[Node] = 
     val nodes: Set[Node] = Set.empty 
     words.foreach(word => nodes.add(Node(word)))
     nodes
 
     
     
-    
-
-
-def findandSetNeighbours(nodes: Set[Nodes]): Unit =
-    nodes.foreach(node => )
-    // for node <- nodes do 
-    //     val neighbours: Set[Node] = Set.empty
+def findandSetNeighbours(nodes: Set[Node]): Unit =
+    //nodes.foreach(node => )
+    for node <- nodes do 
+        val neighbours: Set[Node] = Set.empty
+        for potentialNeighbour <- nodes do
+            val fulfillsNeighbouringCondition: Boolean = node.value.substring(1).forall(char => potentialNeighbour.value.contains(char))
+            if node != potentialNeighbour && fulfillsNeighbouringCondition then
+                neighbours.add(potentialNeighbour)
+            
+        node.neighbours = neighbours
