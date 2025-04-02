@@ -12,26 +12,29 @@ val wordNodeRelations: HashMap[String, Node] = HashMap.empty
     val noWords: Int = numbers(0)
     val noQueries: Int = numbers(1)
 
-    val words: Set[String] = Set.empty
-    
-    for i <- 0 until noWords do
-        words.add(readLine())
+    val words: Set[String] = readWords(noWords)
 
     val nodes: Set[Node] = makeNodes(words)
     findandSetNeighbours(nodes)
 
-    //nodes.foreach(node => println(node.toString() + " " + node.neighbours.toString() + "\n" + "\n"))
-
     val bfs: BFS = BFS(nodes) 
     
+    val queries: ArrayBuffer[(Node, Node)] = readQueries(noQueries)
+
+    queries.foreach(q => bfs.findShortestPath(q._1, q._2))
+
+def readWords(noWords: Int): Set[String] = 
+    val words: Set[String] = Set.empty 
+    for i <- 0 until noWords do
+        words.add(readLine())
+    words
+
+def readQueries(noQueries: Int): ArrayBuffer[(Node, Node)] =
     val queries: ArrayBuffer[(Node, Node)] = ArrayBuffer.empty
     for i <- 0 until noQueries do 
         val pair: Array[String] = readLine().split(" ")
         queries.append(wordNodeRelations(pair(0)) -> wordNodeRelations(pair(1)))
-
-    queries.foreach(q => bfs.findShortestPath(q._1, q._2))
-
-
+    queries
 
 def makeNodes(words: Set[String]): Set[Node] = 
     val nodes: Set[Node] = Set.empty 
@@ -42,10 +45,7 @@ def makeNodes(words: Set[String]): Set[Node] =
     )
     nodes
 
-    
-    
 def findandSetNeighbours(nodes: Set[Node]): Unit =
-    //nodes.foreach(node => )
     for node <- nodes do 
         val neighbours: Set[Node] = Set.empty
         for potentialNeighbour <- nodes do

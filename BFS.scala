@@ -15,8 +15,8 @@ case class BFS(val nodes: Set[Node]):
 
         for node <- nodes do
             node.pred = None
-            node.setUnvisited()
-        start.setVisited()
+            node.visited = false
+        start.visited = true
 
         while !queue.isEmpty do
             val current: Node = queue.dequeue()
@@ -26,12 +26,10 @@ case class BFS(val nodes: Set[Node]):
             if !found then
                 for neighbour <- current.neighbours do 
                     if !neighbour.visited then
-                        neighbour.setVisited()
+                        neighbour.visited = true
                         queue.enqueue(neighbour)
                         neighbour.pred = Some(current)
 
-
-        
         if found then 
             var level: Int = 0 
             var current: Option[Node] = Some(end)
@@ -39,33 +37,6 @@ case class BFS(val nodes: Set[Node]):
                 current = current.get.pred
                 level += 1
             println(level)
-        //else if found && start == end then
-        //    println(0)    
         else 
             println("Impossible")
-    // def findShortestPath(firstWord: Node, secondWord: Node): Unit =
-    //     val visited: Set[Node] = Set.empty
-    //     val queue: Queue[Node] = Queue(firstWord)
-
-    //     var found: Boolean = false 
-    //     var level: Int = 0
-    //     if firstWord == secondWord then 
-    //         found = true
-            
-    //     for nodes <- visited do 
-    //         visited.add(firstWord)
-    //         while !found && !queue.isEmpty do
-    //             level += 1
-    //             val current: Node = queue.dequeue()
-    //             val neighbours: Set[Node] = current.neighbours
-    //             for neighbour <- neighbours do
-    //                 if !visited.contains(neighbour) then
-    //                     visited.add(neighbour)
-    //                     queue.enqueue(neighbour)
-    //                     //pred(neighbour) <- current
-    //                     if neighbour == secondWord then
-    //                         found = true
-                        
-    //     if found then println(level) else println("Impossible")
-
     
