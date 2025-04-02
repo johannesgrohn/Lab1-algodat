@@ -17,12 +17,10 @@ val wordNodeRelations: HashMap[String, Node] = HashMap.empty
     for i <- 0 until noWords do
         words.add(readLine())
 
-
-
     val nodes: Set[Node] = makeNodes(words)
     findandSetNeighbours(nodes)
 
-    nodes.foreach(node => println(node.toString() + " " + node.neighbours.toString()))
+    //nodes.foreach(node => println(node.toString() + " " + node.neighbours.toString() + "\n" + "\n"))
 
     val bfs: BFS = BFS(nodes) 
     
