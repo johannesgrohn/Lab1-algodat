@@ -9,16 +9,17 @@ case class BFS(val nodes: Set[Node]):
 
     def findShortestPath(start: Node, end: Node): Unit =
         val queue: Queue[Node] = Queue.empty
-        start.setVisited()
         queue.enqueue(start)
 
         var found: Boolean = false 
 
         for node <- nodes do
             node.setUnvisited()
-        
-        while !queue.isEmpty && !found do
+        start.setVisited()
+
+        while !queue.isEmpty do
             val current: Node = queue.dequeue()
+
             if current == end then
                 found = true
             if !found then
@@ -26,18 +27,19 @@ case class BFS(val nodes: Set[Node]):
                     if !neighbour.visited then
                         neighbour.setVisited()
                         queue.enqueue(neighbour)
-                        println(current)
                         neighbour.pred = Some(current)
 
 
         
-        if found then 
+        if found && start != end then 
             var level: Int = 0 
             var current: Option[Node] = Some(end)
             while !current.get.pred.isEmpty do
                 current = current.get.pred
                 level += 1
             println(level)
+        else if found && start == end then
+            println(0)    
         else 
             println("Impossible")
     // def findShortestPath(firstWord: Node, secondWord: Node): Unit =
