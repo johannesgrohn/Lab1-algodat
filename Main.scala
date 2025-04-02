@@ -1,7 +1,11 @@
 package main
 
 import scala.collection.mutable.Set
+import scala.collection.mutable.HashMap
+import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn.readLine
+
+val wordNodeRelations: HashMap[String, Node] = HashMap.empty
 
 @main def run(): Unit =
     val numbers: Array[Int] = readLine().split(" ").map(_.toInt)
@@ -9,17 +13,10 @@ import scala.io.StdIn.readLine
     val noQueries: Int = numbers(1)
 
     val words: Set[String] = Set.empty
-    val queries: Set[(String, String)] = Set.empty
-
+    
     for i <- 0 until noWords do
         words.add(readLine())
 
-    for i <- 0 until noQueries do 
-        val pair: Array[String] = readLine().split(" ")
-        queries.add(pair(0) -> pair(1))
-
-    words.foreach(println)
-    queries.foreach(println)
 
 
     val nodes: Set[Node] = makeNodes(words)
@@ -27,12 +24,24 @@ import scala.io.StdIn.readLine
 
     nodes.foreach(node => println(node.toString() + " " + node.neighbours.toString()))
 
+    val bfs: BFS = BFS(nodes) 
+    
+    val queries: ArrayBuffer[(Node, Node)] = ArrayBuffer.empty
+    for i <- 0 until noQueries do 
+        val pair: Array[String] = readLine().split(" ")
+        queries.append(wordNodeRelations(pair(0)) -> wordNodeRelations(pair(1)))
+
+    queries.foreach(q => bfs.findShortestPath(q._1, q._2))
 
 
 
 def makeNodes(words: Set[String]): Set[Node] = 
     val nodes: Set[Node] = Set.empty 
-    words.foreach(word => nodes.add(Node(word)))
+    words.foreach(word => 
+        val createdNode: Node = Node(word)
+        nodes.add(createdNode)
+        wordNodeRelations(word) = createdNode
+    )
     nodes
 
     
@@ -42,7 +51,7 @@ def findandSetNeighbours(nodes: Set[Node]): Unit =
     for node <- nodes do 
         val neighbours: Set[Node] = Set.empty
         for potentialNeighbour <- nodes do
-            val fulfillsNeighbouringCondition: Boolean = node.value.substring(1).forall(char => potentialNeighbour.value.contains(char))
+            val fulfillsNeighbouringCondition: Boolean = node.value.substring(1).intersect(potentialNeighbour.value) == node.value.substring(1)
             if node != potentialNeighbour && fulfillsNeighbouringCondition then
                 neighbours.add(potentialNeighbour)
             
